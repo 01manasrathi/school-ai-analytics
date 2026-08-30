@@ -1,0 +1,37 @@
+# Render Blueprint — deploys the Student Analytics dashboard as a web service.
+#
+# In the Render dashboard: New > Blueprint, connect this repository, and Render
+# reads this file. No manual build/start command entry needed.
+#
+# The free plan gives 0.1 CPU / 512 MB RAM. Measured peak usage of this app is
+# ~302 MB (roughly 245 MB of libraries plus 57 MB of data), so it fits with
+# headroom. Free instances spin down after 15 minutes of inactivity and take
+# ~1 minute to wake on the next request.
+services:
+  - type: web
+    name: school-ai-analytics
+    runtime: python
+    plan: free
+    region: oregon
+
+    # Install only the dashboard's dependencies, not the School AI FastAPI
+    # backend's — faster builds and less to go wrong.
+    buildCommand: pip install --upgrade pip && pip install -r requirements-space.txt
+
+    # Render injects $PORT; Streamlit must bind it on 0.0.0.0 to be reachable.
+    startCommand: >-
+      streamlit run student_analytics/dashboard/Home.py
+      --server.port $PORT
+      --server.address 0.0.0.0
+      --server.headless true
+      --browser.gatherUsageStats false
+
+    healthCheckPath: /_stcore/health
+
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.9"
+      - key: MPLCONFIGDIR
+        value: /tmp/matplotlib
+      - key: PYTHONUNBUFFERED
+        value: "1"

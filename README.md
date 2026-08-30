@@ -72,17 +72,29 @@ python -m student_analytics.dashboard_test    # renders all 9 pages headlessly
 committed `.parquet` dataset (~1.4 MB) means there is no build-time generation step. See
 [the deployment notes](student_analytics/README.md#deploying-to-streamlit-community-cloud).
 
-**Any Docker host** (Render, Railway, Fly.io, Koyeb, a VPS) — a `Dockerfile` is included and
-installs only `requirements-space.txt`, the dashboard's runtime dependencies:
+**Render** (free tier, no card, deploys from GitHub/GitLab/Bitbucket) — `render.yaml` is a
+Blueprint, so *New → Blueprint → connect repo* needs no manual configuration.
+
+**Any Docker host** (Railway, Fly.io, Koyeb, a VPS) — a `Dockerfile` is included and installs
+only `requirements-space.txt`, the dashboard's runtime dependencies:
 
 ```bash
 docker build -t school-ai-analytics .
 docker run --rm -p 8501:8501 school-ai-analytics
 ```
 
-> Note: Hugging Face Spaces is **not** a free option for this app. HF deprecated its Streamlit
-> SDK in April 2025, so Streamlit now requires a Docker Space, and Docker Spaces require a PRO
-> subscription. Only Static (HTML-only) Spaces are free.
+### Resource footprint
+
+Measured peak resident memory while rendering the heaviest pages: **~302 MB** — about 245 MB of
+libraries (streamlit, pandas, plotly, matplotlib, statsmodels) plus ~57 MB of dataset. That
+fits Render's 512 MB free plan with ~210 MB spare. Because most of the footprint is libraries
+rather than data, shrinking the dataset further buys very little.
+
+### Hosts that do *not* work
+
+- **Hugging Face Spaces** — HF deprecated its Streamlit SDK in April 2025, so Streamlit now
+  requires a Docker Space, and Docker Spaces require a **PRO subscription**. Only Static
+  (HTML-only) Spaces are free, and those cannot run Python.
 
 ---
 
