@@ -1,0 +1,27 @@
+# Runtime dependencies for the Student Analytics dashboard only, used by the
+# Dockerfile for container-based deployments.
+#
+# The root requirements.txt additionally carries the School AI FastAPI backend
+# (fastapi, uvicorn, passlib, python-jose, ollama, ...). None of that is needed
+# to serve the dashboard, so it is omitted here to keep the image small and the
+# build fast. Keep the pinned versions in sync with requirements.txt.
+
+streamlit==1.52.2
+pandas==2.3.1
+numpy==2.2.6
+pyarrow==21.0.0
+
+# Visualisation
+plotly==5.24.1
+matplotlib==3.10.8
+statsmodels==0.15.0
+
+# PDF report cards
+reportlab==4.2.5
+
+# Excel export / import
+openpyxl==3.1.5
+xlsxwriter==3.2.9
+
+# Used by the optional Canvas LMS and Google Sheets connectors
+requests==2.32.3

@@ -1,0 +1,21 @@
+.git
+.gitignore
+__pycache__/
+**/__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Generated build outputs — the dashboard ships with the .parquet dataset only
+student_analytics/data/*.csv
+student_analytics/data/*.xlsx
+student_analytics/output/
+student_analytics/.cache/
+reports/
+data/*.csv
+
+# Not needed to serve the dashboard
+backend/
+frontend/
+seed_data.py
+*.ps1

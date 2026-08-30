@@ -65,11 +65,24 @@ python -m student_analytics.smoke_test        # analytics + all 30 charts + PDF 
 python -m student_analytics.dashboard_test    # renders all 9 pages headlessly
 ```
 
-### Deploying to Streamlit Community Cloud
+### Deploying
 
-Main file path `student_analytics/dashboard/Home.py`; dependencies come from the root
-`requirements.txt`; the committed `.parquet` dataset (~1.4 MB) means no build-time data
-generation. See [the deployment notes](student_analytics/README.md#deploying-to-streamlit-community-cloud).
+**Streamlit Community Cloud** (free, no card) — main file path
+`student_analytics/dashboard/Home.py`, dependencies from the root `requirements.txt`. The
+committed `.parquet` dataset (~1.4 MB) means there is no build-time generation step. See
+[the deployment notes](student_analytics/README.md#deploying-to-streamlit-community-cloud).
+
+**Any Docker host** (Render, Railway, Fly.io, Koyeb, a VPS) — a `Dockerfile` is included and
+installs only `requirements-space.txt`, the dashboard's runtime dependencies:
+
+```bash
+docker build -t school-ai-analytics .
+docker run --rm -p 8501:8501 school-ai-analytics
+```
+
+> Note: Hugging Face Spaces is **not** a free option for this app. HF deprecated its Streamlit
+> SDK in April 2025, so Streamlit now requires a Docker Space, and Docker Spaces require a PRO
+> subscription. Only Static (HTML-only) Spaces are free.
 
 ---
 
