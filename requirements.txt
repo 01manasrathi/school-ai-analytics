@@ -1,0 +1,43 @@
+# School AI - Unified Requirements (Backend + Frontend)
+# Everything is open-source. No paid APIs. Local LLM via Ollama.
+
+# --- Backend (FastAPI) ---
+fastapi==0.125.0
+uvicorn[standard]==0.38.0
+pydantic==2.12.4
+python-multipart==0.0.21
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+bcrypt==4.2.0
+
+# --- Data storage (CSV/Excel/Parquet) ---
+pandas==2.3.1
+numpy==2.2.6
+openpyxl==3.1.5
+# xlsxwriter is ~20x faster than openpyxl for the generated workbook
+xlsxwriter==3.2.9
+# pyarrow backs the compressed .parquet dataset copies (also a Streamlit dependency)
+pyarrow==21.0.0
+
+# --- Reports / Visualization ---
+matplotlib==3.10.8
+reportlab==4.2.5
+
+# --- Frontend (Streamlit) ---
+streamlit==1.52.2
+requests==2.32.3
+plotly==5.24.1
+
+# --- Student analytics module (student_analytics/) ---
+# statsmodels powers the OLS trendlines in the Plotly scatter charts.
+# It is optional: the charts render without trendlines if it is missing.
+statsmodels==0.15.0
+
+# --- AI / Agentic workflow (local, open-source model via Ollama) ---
+ollama==0.4.4
+
+# --- Optional: live Google Sheets / Google Forms integration ---
+# Only needed for the credentialed path on the Integrations page. The
+# "Publish to web -> CSV" path works with `requests` alone.
+# google-api-python-client==2.149.0
+# google-auth==2.35.0

@@ -1,0 +1,19 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+reports/*.pdf
+reports/charts/*.png
+data/*.csv
+!data/.gitkeep
+.streamlit/secrets.toml
+
+# student_analytics: the bulky generated artefacts are NOT committed. The small
+# .parquet copies ARE committed so a fresh clone / cloud deploy boots with data
+# and needs no generation step. Rebuild the rest with:
+#   python -m student_analytics.generate_dataset
+student_analytics/data/*.csv
+student_analytics/data/*.xlsx
+student_analytics/output/
+student_analytics/.cache/
+!student_analytics/data/*.parquet

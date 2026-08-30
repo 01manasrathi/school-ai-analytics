@@ -1,0 +1,14 @@
+[theme]
+primaryColor = "#4C6FFF"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F8F9FB"
+textColor = "#212529"
+font = "sans serif"
+
+[server]
+# Uploads are not used by this app; keep the limit small.
+maxUploadSize = 5
+enableXsrfProtection = true
+
+[browser]
+gatherUsageStats = false
