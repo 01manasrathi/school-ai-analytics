@@ -68,9 +68,18 @@ python -m student_analytics.dashboard_test    # renders all 9 pages headlessly
 ### Deploying
 
 **Streamlit Community Cloud** (free, no card) — main file path
-`student_analytics/dashboard/Home.py`, dependencies from the root `requirements.txt`. The
-committed `.parquet` dataset (~1.4 MB) means there is no build-time generation step. See
+`student_analytics/dashboard/Home.py`. Dependencies come from
+`student_analytics/dashboard/requirements.txt` (Cloud prefers a requirements file sitting
+next to the entrypoint), which installs only the dashboard's packages. The committed
+`.parquet` dataset (~1.4 MB) means there is no build-time generation step. See
 [the deployment notes](student_analytics/README.md#deploying-to-streamlit-community-cloud).
+
+> **Dependency versions are floors (`>=`), not exact pins, and that is deliberate.** Community
+> Cloud currently defaults to **Python 3.14** and ignores `runtime.txt` / `.python-version`, so
+> the interpreter cannot be pinned from the repo. Exact pins on the compiled packages left pip
+> with no `cp314` wheel for `pyarrow`, so it tried to build Arrow C++ from source and failed
+> with `command 'cmake' failed`. The floors (`pyarrow>=22`, `pandas>=2.3.3`, `numpy>=2.3.2`)
+> are the first releases shipping cp314 wheels, keeping the install binary-only.
 
 **Render** (free tier, no card, deploys from GitHub/GitLab/Bitbucket) — `render.yaml` is a
 Blueprint, so *New → Blueprint → connect repo* needs no manual configuration.

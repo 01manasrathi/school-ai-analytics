@@ -11,27 +11,31 @@ passlib[bcrypt]==1.7.4
 bcrypt==4.2.0
 
 # --- Data storage (CSV/Excel/Parquet) ---
-pandas==2.3.1
-numpy==2.2.6
-openpyxl==3.1.5
+# Floors rather than exact pins on the compiled packages: these are the first
+# releases publishing cp314 wheels. Exact older pins force a source build on
+# Python 3.14 (Streamlit Community Cloud's default), which fails for pyarrow
+# with "command 'cmake' failed". Majors are capped so behaviour stays stable.
+pandas>=2.3.3,<3
+numpy>=2.3.2,<3
+openpyxl>=3.1
 # xlsxwriter is ~20x faster than openpyxl for the generated workbook
-xlsxwriter==3.2.9
+xlsxwriter>=3.2
 # pyarrow backs the compressed .parquet dataset copies (also a Streamlit dependency)
-pyarrow==21.0.0
+pyarrow>=22.0.0
 
 # --- Reports / Visualization ---
-matplotlib==3.10.8
-reportlab==4.2.5
+matplotlib>=3.10.5
+reportlab>=4.2
 
 # --- Frontend (Streamlit) ---
-streamlit==1.52.2
-requests==2.32.3
-plotly==5.24.1
+streamlit>=1.52
+requests>=2.32
+plotly>=5.24,<7
 
 # --- Student analytics module (student_analytics/) ---
 # statsmodels powers the OLS trendlines in the Plotly scatter charts.
 # It is optional: the charts render without trendlines if it is missing.
-statsmodels==0.15.0
+statsmodels>=0.14.5
 
 # --- AI / Agentic workflow (local, open-source model via Ollama) ---
 ollama==0.4.4

@@ -47,8 +47,14 @@ Run both after touching anything under `student_analytics/`.
   the CSV and `.xlsx` copies are gitignored build outputs. `core/loader.py` prefers Parquet and
   falls back to CSV, and the dashboard self-generates if neither exists.
 - Writing the Excel workbook dominates generation time; pass `--no-excel` when iterating.
-- Streamlit Cloud entry point is `student_analytics/dashboard/Home.py`; deps come from the
-  root `requirements.txt`.
+- Streamlit Cloud entry point is `student_analytics/dashboard/Home.py`; it installs
+  `student_analytics/dashboard/requirements.txt` (Cloud prefers a requirements file next to the
+  entrypoint over the root one).
+- Requirements use version floors (`>=`), not exact pins, on purpose. Streamlit Cloud defaults
+  to Python 3.14 and ignores `runtime.txt`/`.python-version`, so older exact pins have no cp314
+  wheel and trigger a source build that fails (`command 'cmake' failed` for pyarrow). Floors:
+  `pyarrow>=22`, `pandas>=2.3.3`, `numpy>=2.3.2`. Verify any pin change against the newest
+  resolvable versions, not just the locally installed ones.
 - After regenerating, clear the Streamlit cache (⋮ menu → Clear cache → Rerun); the dataset is
   held in `@st.cache_resource`.
 - No API keys are required for any feature. Canvas LMS / Google Forms connectors are optional

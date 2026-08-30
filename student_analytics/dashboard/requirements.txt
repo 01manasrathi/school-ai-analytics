@@ -1,0 +1,41 @@
+# Dependencies for the Streamlit Community Cloud deployment.
+#
+# Community Cloud looks for a requirements file either in the repo root or in
+# the same directory as the entrypoint. Keeping one here means the deployment
+# installs ONLY what the dashboard needs — the root requirements.txt also
+# carries the School AI FastAPI backend (fastapi, uvicorn, pydantic, passlib,
+# python-jose, ollama), none of which the dashboard imports.
+#
+# Version floors, not exact pins, and here is why: Community Cloud currently
+# defaults to Python 3.14, and it ignores runtime.txt / .python-version, so the
+# interpreter cannot be pinned from the repo. Exact pins on the compiled
+# packages meant pip could find no cp314 wheel and tried to build Arrow C++
+# from source, which fails ("command 'cmake' failed"). These floors are the
+# first releases that publish cp314 wheels, so the install stays binary-only:
+#
+#   pyarrow >= 22.0.0   (21.0.0 has no cp314 wheel - this was the build failure)
+#   pandas  >= 2.3.3    (2.3.1 has no cp314 wheel)
+#   numpy   >= 2.3.2    (2.2.6 has no cp314 wheel)
+#
+# Upper bounds hold the major version steady so a new pandas 3 / plotly 7
+# cannot silently change behaviour under the app.
+
+streamlit>=1.52
+pandas>=2.3.3,<3
+numpy>=2.3.2,<3
+pyarrow>=22.0.0
+
+# Visualisation
+plotly>=5.24,<7
+matplotlib>=3.10.5
+statsmodels>=0.14.5
+
+# PDF report cards
+reportlab>=4.2
+
+# Excel export
+openpyxl>=3.1
+xlsxwriter>=3.2
+
+# Canvas LMS / Google Sheets connectors (also a Streamlit dependency)
+requests>=2.32
