@@ -1,10 +1,17 @@
-streamlit==1.52.2
-langgraph==1.0.7
-qdrant-client==1.16.2
-pypdf==6.6.0
-pypdfium2==5.3.0
-networkx==3.6.1
-plotly==6.5.2
-filelock==3.20.3
-requests==2.32.5
-reportlab==4.4.9
+# StaffDesk dependencies for Streamlit Community Cloud and local use.
+#
+# Put this file next to the entrypoint (app.py) so Community Cloud installs
+# only what StaffDesk needs. The pinned floors are recent enough to have
+# Python 3.14 (cp314) wheels, while upper caps keep behaviour stable across
+# a major version.
+
+streamlit>=1.52.2,<2
+langgraph>=1.0.7,<2
+qdrant-client>=1.16.2,<2
+pypdf>=6.6.0,<7
+pypdfium2>=5.3.0,<6
+networkx>=3.6.1,<4
+plotly>=6.5.2,<7
+filelock>=3.20.3,<4
+requests>=2.32.5,<3
+reportlab>=4.4.9,<5
