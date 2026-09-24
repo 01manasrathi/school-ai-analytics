@@ -1,0 +1,86 @@
+[
+  {
+    "question": "What time does the school day start and end?",
+    "page": 1,
+    "expected": [
+      "8:15 AM",
+      "3:10 PM"
+    ]
+  },
+  {
+    "question": "By what time must parents report a student's absence?",
+    "page": 2,
+    "expected": [
+      "8:45 AM",
+      "Attendance Officer"
+    ]
+  },
+  {
+    "question": "How soon must teachers return marked assignments?",
+    "page": 3,
+    "expected": [
+      "7 school days"
+    ]
+  },
+  {
+    "question": "Who approves planned leave and how early must staff request it?",
+    "page": 4,
+    "expected": [
+      "Principal",
+      "5 school days"
+    ]
+  },
+  {
+    "question": "Who should staff contact if the Designated Safeguarding Lead is unavailable?",
+    "page": 5,
+    "expected": [
+      "Deputy Safeguarding Lead"
+    ]
+  },
+  {
+    "question": "How quickly does the Pastoral Lead acknowledge a bullying report?",
+    "page": 6,
+    "expected": [
+      "1 school day"
+    ]
+  },
+  {
+    "question": "Where is the primary evacuation assembly point?",
+    "page": 7,
+    "expected": [
+      "north sports field"
+    ]
+  },
+  {
+    "question": "How quickly must staff report a lost school device?",
+    "page": 8,
+    "expected": [
+      "1 hour",
+      "IT Coordinator"
+    ]
+  },
+  {
+    "question": "What is the deadline for an initial written response to a formal complaint?",
+    "page": 9,
+    "expected": [
+      "10 school days"
+    ]
+  },
+  {
+    "question": "How early must teachers submit trip risk assessments?",
+    "page": 10,
+    "expected": [
+      "15 school days"
+    ]
+  },
+  {
+    "question": "What is tomorrow's cafeteria menu?",
+    "page": null,
+    "expected": []
+  },
+  {
+    "question": "How much is the Principal paid each month?",
+    "page": null,
+    "expected": []
+  }
+]

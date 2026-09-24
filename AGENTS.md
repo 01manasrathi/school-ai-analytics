@@ -2,10 +2,14 @@
 
 Project overview and detailed workflow: see `PROJECT.md`.
 
-There are two apps in this repo:
+There are three independent apps in this repo:
 1. **School AI** — FastAPI + Streamlit management system (`backend/`, `frontend/`, `data/`).
 2. **Student Analytics & Report Generator** — standalone analytics dashboard
    (`student_analytics/`). See `student_analytics/README.md`.
+3. **StaffDesk** — local PDF-only policy assistant, LangGraph agents, Qdrant local vectors,
+   and a visual knowledge graph (`staffdesk/`). See `staffdesk/AGENTS.md`. It uses its own
+   `.venv` and data directory; do not install its dependencies into the other apps' environment.
+   Run `staffdesk\setup.ps1`, then `staffdesk\start.ps1` (localhost port 8503).
 
 ## Setup
 ```powershell
@@ -40,8 +44,10 @@ Run both after touching anything under `student_analytics/`.
 - student1 / student123
 
 ## Notes
-- All data lives in `data/*.csv` and `student_analytics/data/*.csv` — no database, no Docker,
-  no Node.js.
+- Management and analytics tabular data lives in `data/*.csv` and
+  `student_analytics/data/*.csv` (with analytics Parquet copies described below).
+  StaffDesk separately stores PDFs, JSON metadata, and Qdrant local vectors in `staffdesk/data/`.
+  None of these apps requires a separately installed database server or Node.js.
 - The analytics module is self-contained: it reads its own dataset and does not need the
   FastAPI backend or a login. Only `student_analytics/data/*.parquet` is committed (~1.4 MB);
   the CSV and `.xlsx` copies are gitignored build outputs. `core/loader.py` prefers Parquet and
