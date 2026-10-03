@@ -1,0 +1,10 @@
+code,name,programme,ib_group,hl,sl,prerequisites,is_active
+ENG_LIT,English A: Literature,IBDP,1,Y,Y,,Y
+CHI_B,Chinese B,IBDP,2,Y,Y,,Y
+FRE_AB,French Ab Initio,IBDP,2,N,Y,,Y
+ECON,Economics,IBDP,3,Y,Y,,Y
+PHYS,Physics,IBDP,4,Y,Y,,Y
+ESS,Environmental Systems & Societies,IBDP,4,N,Y,,Y
+MAA,Mathematics: Analysis & Approaches,IBDP,5,Y,Y,,Y
+VA,Visual Arts,IBDP,6,Y,Y,,Y
+GPOL,Global Politics,IBDP,3,Y,Y,,Y

@@ -1,0 +1,8 @@
+student_id,subject_code,level,block,status
+S3003,ENG_LIT,HL,A,approved
+S3003,SPA_AB,SL,B,approved
+S3003,ECON,HL,C,approved
+S3003,BIO,HL,D,approved
+S3003,MAA,SL,E,approved
+S3003,VA,HL,F,approved
+S3003,FILM,SL,G,approved

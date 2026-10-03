@@ -1,0 +1,3 @@
+student_id,current_subject_code,current_level,requested_subject_code,requested_level,requested_block,reason,priority
+S1030,PSYCH,HL,ECON,HL,C,Interested in economics,3
+S1031,BIO,HL,CHEM,HL,D,Career change to medicine,1

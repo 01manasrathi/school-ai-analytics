@@ -1,0 +1,7 @@
+subject_code,block,programme,level,teacher,room,capacity,min_enrollment,is_active
+ECON,C,IBDP,HL,Ms Lim,R201,18,8,Y
+ECON,C,IBDP,SL,Ms Lim,R201,18,8,Y
+PHYS,D,IBDP,HL,Mr Garcia,LAB2,18,8,Y
+PHYS,D,IBDP,SL,Mr Garcia,LAB2,18,8,Y
+MAA,E,IBDP,HL,Dr Chen,R305,20,8,Y
+MAA,E,IBDP,SL,Dr Chen,R305,20,8,Y

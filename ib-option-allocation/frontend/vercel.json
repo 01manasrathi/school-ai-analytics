@@ -1,0 +1,7 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "installCommand": "npm ci",
+  "comment": "Deploy with Root Directory = frontend. Set BACKEND_URL in Project → Settings → Environment Variables to your FastAPI host (e.g. https://ib-allocation-api.onrender.com); next.config.js rewrites /api/* to it."
+}

@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ring: 99 102 241;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+}
+
+/* thin, unobtrusive scrollbars inside scrollable panels */
+.scroll-thin::-webkit-scrollbar { width: 8px; height: 8px; }
+.scroll-thin::-webkit-scrollbar-thumb { @apply bg-slate-300 rounded-full; }
+.scroll-thin::-webkit-scrollbar-track { @apply bg-transparent; }
+
+@layer components {
+  .card { @apply bg-white rounded-xl shadow-sm ring-1 ring-slate-200/70 p-5; }
+  .card-tight { @apply bg-white rounded-xl shadow-sm ring-1 ring-slate-200/70 p-3; }
+
+  .btn { @apply inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg text-sm font-semibold text-white
+          bg-gradient-to-b from-indigo-500 to-indigo-600 shadow-sm ring-1 ring-indigo-700/20
+          hover:from-indigo-600 hover:to-indigo-700 active:translate-y-px
+          disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:from-indigo-500 transition; }
+  .btn-secondary { @apply inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg text-sm font-semibold
+          text-slate-700 bg-white ring-1 ring-slate-300 shadow-sm hover:bg-slate-50 active:translate-y-px
+          disabled:opacity-40 disabled:cursor-not-allowed transition; }
+  .btn-danger { @apply inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg text-sm font-semibold text-white
+          bg-gradient-to-b from-rose-500 to-rose-600 shadow-sm ring-1 ring-rose-700/20
+          hover:from-rose-600 hover:to-rose-700 active:translate-y-px disabled:opacity-40 disabled:cursor-not-allowed transition; }
+  .btn-ghost { @apply inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm font-medium text-slate-600
+          hover:bg-slate-100 hover:text-slate-900 transition; }
+  .btn-xs { @apply px-2 py-1 text-xs rounded-md; }
+
+  .input { @apply w-full rounded-lg border-0 ring-1 ring-slate-300 bg-white px-2.5 py-1.5 text-sm text-slate-800
+          shadow-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition; }
+  .label { @apply block text-[11px] font-semibold uppercase tracking-wide text-slate-500 mb-1; }
+
+  .tbl { @apply w-full text-sm border-separate border-spacing-0; }
+  .tbl th { @apply sticky top-0 z-10 text-left font-semibold text-slate-600 bg-slate-50/95 backdrop-blur
+          px-3 py-2 border-b border-slate-200 whitespace-nowrap; }
+  .tbl td { @apply px-3 py-2 border-b border-slate-100 align-middle; }
+  .tbl tbody tr { @apply hover:bg-indigo-50/40 transition-colors; }
+
+  .h1 { @apply text-2xl font-bold tracking-tight text-slate-900; }
+  .h2 { @apply text-base font-semibold text-slate-800 mb-3; }
+  .muted { @apply text-sm text-slate-500; }
+
+  .chip { @apply inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[11px] font-semibold ring-1; }
+  .tab { @apply px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:bg-white hover:text-slate-900 transition; }
+  .tab-active { @apply bg-white text-indigo-700 shadow-sm ring-1 ring-slate-200; }
+}

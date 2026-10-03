@@ -1,0 +1,271 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "New Student Allocation — Run, Review, Commit",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "engine-pass",
+        "label": "Engine pass",
+        "focus": [
+          "seats",
+          "order",
+          "search",
+          "rulecheck"
+        ],
+        "note": "Existing students are already counted, so only leftover seats are offered."
+      },
+      {
+        "id": "no-seat-branch",
+        "label": "No seat branch",
+        "focus": [
+          "rulecheck",
+          "waitlist"
+        ],
+        "note": "When every offering in a block is full the slot is waitlisted, not silently dropped."
+      },
+      {
+        "id": "human-gate",
+        "label": "Human gate",
+        "focus": [
+          "proposal",
+          "review",
+          "commit",
+          "write"
+        ],
+        "note": "The proposal is a dry run; nothing is stored until the timetabler commits."
+      }
+    ]
+  },
+  "lanes": [
+    {
+      "id": "ui",
+      "label": "Timetabler UI"
+    },
+    {
+      "id": "engine",
+      "label": "Allocation engine and persistence"
+    },
+    {
+      "id": "rules",
+      "label": "Rules and exceptions",
+      "variant": "exception"
+    }
+  ],
+  "phases": [
+    {
+      "id": "prepare",
+      "label": "Prepare",
+      "fromCol": 0,
+      "toCol": 1
+    },
+    {
+      "id": "solve",
+      "label": "Solve per student",
+      "fromCol": 2,
+      "toCol": 3,
+      "variant": "emphasis"
+    },
+    {
+      "id": "confirm",
+      "label": "Review and commit",
+      "fromCol": 4,
+      "toCol": 5
+    }
+  ],
+  "mainPath": [
+    "run",
+    "order",
+    "search",
+    "rulecheck",
+    "proposal",
+    "review",
+    "commit",
+    "write"
+  ],
+  "semanticChecks": {
+    "allowedRoots": [
+      "run",
+      "seats"
+    ],
+    "allowedTerminals": [
+      "write",
+      "waitlist"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "run",
+      "lane": "ui",
+      "col": 0,
+      "type": "frontend",
+      "label": "Run allocation",
+      "sublabel": "dry run",
+      "width": 132
+    },
+    {
+      "id": "seats",
+      "lane": "engine",
+      "col": 0,
+      "type": "database",
+      "label": "Remaining seats",
+      "sublabel": "capacity minus enrolled",
+      "width": 132
+    },
+    {
+      "id": "order",
+      "lane": "engine",
+      "col": 1,
+      "type": "backend",
+      "label": "Priority order",
+      "sublabel": "lowest number first",
+      "width": 132
+    },
+    {
+      "id": "search",
+      "lane": "engine",
+      "col": 2,
+      "type": "backend",
+      "label": "Per-block search",
+      "sublabel": "preferences first",
+      "tag": "pruned DFS",
+      "width": 132
+    },
+    {
+      "id": "rulecheck",
+      "lane": "rules",
+      "col": 2,
+      "type": "security",
+      "label": "Rule check",
+      "sublabel": "HL/SL, groups, Maths",
+      "width": 132
+    },
+    {
+      "id": "proposal",
+      "lane": "engine",
+      "col": 3,
+      "type": "backend",
+      "label": "Proposal",
+      "sublabel": "slots with reasons",
+      "width": 132
+    },
+    {
+      "id": "waitlist",
+      "lane": "rules",
+      "col": 3,
+      "type": "messagebus",
+      "label": "Waitlist slot",
+      "sublabel": "UNALLOCATED_SLOT",
+      "width": 132
+    },
+    {
+      "id": "review",
+      "lane": "ui",
+      "col": 4,
+      "type": "frontend",
+      "label": "Review and edit",
+      "sublabel": "dropdown per slot",
+      "width": 132
+    },
+    {
+      "id": "commit",
+      "lane": "ui",
+      "col": 5,
+      "type": "frontend",
+      "label": "Commit",
+      "sublabel": "re-validated",
+      "width": 132
+    },
+    {
+      "id": "write",
+      "lane": "engine",
+      "col": 5,
+      "type": "database",
+      "label": "Choices saved",
+      "sublabel": "NEW_ALLOCATION",
+      "width": 132
+    }
+  ],
+  "edges": [
+    {
+      "id": "start-run",
+      "from": "run",
+      "to": "order",
+      "variant": "emphasis"
+    },
+    {
+      "id": "seed-seats",
+      "from": "seats",
+      "to": "order",
+      "label": "seats left",
+      "variant": "dashed",
+      "role": "branch"
+    },
+    {
+      "id": "order-search",
+      "from": "order",
+      "to": "search",
+      "variant": "default"
+    },
+    {
+      "id": "test-candidate",
+      "from": "search",
+      "to": "rulecheck",
+      "label": "test candidate",
+      "variant": "security"
+    },
+    {
+      "id": "accept-set",
+      "from": "rulecheck",
+      "to": "proposal",
+      "label": "first valid set",
+      "variant": "emphasis"
+    },
+    {
+      "id": "no-seat",
+      "from": "rulecheck",
+      "to": "waitlist",
+      "label": "block full",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "show-proposal",
+      "from": "proposal",
+      "to": "review",
+      "variant": "default"
+    },
+    {
+      "id": "confirm-commit",
+      "from": "review",
+      "to": "commit",
+      "variant": "default"
+    },
+    {
+      "id": "persist",
+      "from": "commit",
+      "to": "write",
+      "label": "one transaction",
+      "variant": "emphasis"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Only leftover seats",
+      "items": [
+        "Existing students are counted before the first new student is placed",
+        "Blocks holding a preferred subject are solved first"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Nothing fails silently",
+      "items": [
+        "A full block yields a waitlist slot flagged UNALLOCATED_SLOT",
+        "Manual edits are re-validated; a breach returns 422 and saves nothing"
+      ]
+    }
+  ]
+}
