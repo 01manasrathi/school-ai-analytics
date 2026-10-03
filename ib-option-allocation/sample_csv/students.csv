@@ -1,0 +1,4 @@
+student_id,name,grade,programme,cohort_year,status,nationality,language_profile,prior_subjects,priority
+S3001,Ava Tan,11,IBDP,2027,NEW,Singaporean,"English (A), Chinese (B)",IGCSE_MATH_EXT;IGCSE_CHEM,1
+S3002,Rohan Mehta,11,IBDP,2027,NEW,Indian,"English (A), French (B)",,2
+S3003,Sakura Ito,11,IBDP,2027,EXISTING,Japanese,"English (A), Spanish (ab initio)",,100

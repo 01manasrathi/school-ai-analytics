@@ -1,0 +1,8 @@
+name,label,programme,grade,period,max_choices_per_student,sort_order,notes
+A,Language A,IBDP,11-12,Line 1,1,1,
+B,Language B / Ab Initio,IBDP,11-12,Line 2,1,2,
+C,Individuals & Societies,IBDP,11-12,Line 3,1,3,
+D,Sciences,IBDP,11-12,Line 4,1,4,
+E,Mathematics,IBDP,11-12,Line 5,1,5,
+F,Arts / Computer Science,IBDP,11-12,Line 6,1,6,
+G,Electives / Cross-group,IBDP,11-12,Line 7,1,7,

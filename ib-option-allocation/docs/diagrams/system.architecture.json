@@ -1,0 +1,314 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "IB Option Allocation Tool — System Architecture",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "request-path",
+        "label": "Request path",
+        "focus": [
+          "timetabler",
+          "nextui",
+          "api",
+          "services",
+          "sqlite"
+        ],
+        "note": "Follow one click from the browser through the proxy to durable state."
+      },
+      {
+        "id": "rules-and-engines",
+        "label": "Rules and engines",
+        "focus": [
+          "services",
+          "engines",
+          "ruleset",
+          "sqlite"
+        ],
+        "note": "Rules are loaded from the database, never hardcoded in the engines."
+      },
+      {
+        "id": "access-control",
+        "label": "Access control",
+        "focus": [
+          "auth",
+          "api",
+          "csvfiles"
+        ],
+        "note": "Token verification and the ADMIN gate guard every write, including CSV import."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "timetabler",
+      "type": "external",
+      "label": "Timetabler",
+      "sublabel": "Browser",
+      "pos": [
+        40,
+        130
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "nextui",
+      "type": "frontend",
+      "label": "Next.js 14 UI",
+      "sublabel": "8 pages · Tailwind",
+      "pos": [
+        40,
+        300
+      ],
+      "size": [
+        150,
+        64
+      ],
+      "tag": "App Router"
+    },
+    {
+      "id": "api",
+      "type": "backend",
+      "label": "FastAPI app",
+      "sublabel": "9 routers · /api/*",
+      "pos": [
+        350,
+        300
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "services",
+      "type": "backend",
+      "label": "services.py",
+      "sublabel": "DB and engine glue",
+      "pos": [
+        660,
+        300
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "sqlite",
+      "type": "database",
+      "label": "SQLite",
+      "sublabel": "ib_options.db",
+      "pos": [
+        970,
+        300
+      ],
+      "size": [
+        150,
+        64
+      ],
+      "tag": "PostgreSQL-ready"
+    },
+    {
+      "id": "auth",
+      "type": "security",
+      "label": "Auth and roles",
+      "sublabel": "PBKDF2 · HMAC token",
+      "pos": [
+        350,
+        130
+      ],
+      "size": [
+        150,
+        64
+      ],
+      "tag": "ADMIN gate"
+    },
+    {
+      "id": "engines",
+      "type": "backend",
+      "label": "Rule engines",
+      "sublabel": "allocation · feasibility",
+      "pos": [
+        660,
+        130
+      ],
+      "size": [
+        150,
+        64
+      ],
+      "tag": "pure functions"
+    },
+    {
+      "id": "ruleset",
+      "type": "backend",
+      "label": "RuleSet loader",
+      "sublabel": "app/rules.py",
+      "pos": [
+        970,
+        130
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "csvfiles",
+      "type": "external",
+      "label": "CSV files",
+      "sublabel": "imports · reports",
+      "pos": [
+        350,
+        470
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "migrations",
+      "type": "backend",
+      "label": "Alembic and seed",
+      "sublabel": "schema · dummy data",
+      "pos": [
+        970,
+        470
+      ],
+      "size": [
+        150,
+        64
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Local machine · uvicorn 127.0.0.1:8000",
+      "wraps": [
+        "api",
+        "services",
+        "sqlite",
+        "auth",
+        "engines",
+        "ruleset",
+        "migrations"
+      ]
+    },
+    {
+      "kind": "security-group",
+      "label": "Bearer token required",
+      "wraps": [
+        "auth",
+        "api"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "user-opens-ui",
+      "from": "timetabler",
+      "to": "nextui",
+      "label": "HTTP :3000",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 44
+    },
+    {
+      "id": "ui-proxies-api",
+      "from": "nextui",
+      "to": "api",
+      "label": "proxy /api/*",
+      "variant": "emphasis"
+    },
+    {
+      "id": "router-calls-services",
+      "from": "api",
+      "to": "services",
+      "label": "load + apply"
+    },
+    {
+      "id": "services-persist",
+      "from": "services",
+      "to": "sqlite",
+      "label": "SQLAlchemy ORM",
+      "variant": "emphasis"
+    },
+    {
+      "id": "token-gate",
+      "from": "auth",
+      "to": "api",
+      "label": "require ADMIN",
+      "variant": "security",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 44
+    },
+    {
+      "id": "services-run-engines",
+      "from": "services",
+      "to": "engines",
+      "label": "dataclasses in",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "rules-feed-engines",
+      "from": "ruleset",
+      "to": "engines",
+      "label": "RuleSet",
+      "fromSide": "left",
+      "toSide": "right"
+    },
+    {
+      "id": "rules-from-db",
+      "from": "sqlite",
+      "to": "ruleset",
+      "label": "rules table",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "csv-round-trip",
+      "from": "csvfiles",
+      "to": "api",
+      "label": "import / export",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "schema-and-seed",
+      "from": "migrations",
+      "to": "sqlite",
+      "label": "upgrade head",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "How a decision is made",
+      "items": [
+        "Next.js rewrites /api/* to FastAPI, so no CORS is needed",
+        "engines/ are pure and unit-tested; one validator serves every path"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "Configured, not hardcoded",
+      "items": [
+        "13 rule types and blocks A-G are database rows, edited in Settings",
+        "Writes need ADMIN; enrollment and audit row share one transaction"
+      ]
+    }
+  ]
+}

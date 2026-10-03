@@ -1,0 +1,46 @@
+# Render Blueprint — deploys the JavaScript app (Next.js) together with the FastAPI backend.
+# Streamlit Cloud cannot host Next.js; this is the free-tier home for the JS front end.
+#
+# Use: dashboard.render.com → New → Blueprint → pick this repository.
+# Render creates both services and injects the API URL into the web service automatically.
+
+services:
+  # ---------------------------------------------------------------- FastAPI REST API
+  - type: web
+    name: ib-allocation-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt && python -m alembic upgrade head && python -m app.seed
+    startCommand: python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12"
+      - key: SECRET_KEY
+        generateValue: true          # random per deploy; set your own to keep sessions across restarts
+      - key: CORS_ORIGINS
+        value: "*"
+      # Free instances have an ephemeral disk, so the SQLite file (and any edits) reset on restart.
+      # Create a free Render PostgreSQL instance and paste its Internal Database URL here as
+      #   postgresql+psycopg2://...   (also uncomment psycopg2-binary in backend/requirements.txt)
+      # - key: DATABASE_URL
+      #   value: postgresql+psycopg2://user:pass@host:5432/ib_options
+
+  # ---------------------------------------------------------------- Next.js front end
+  - type: web
+    name: ib-allocation-web
+    runtime: node
+    plan: free
+    rootDir: frontend
+    buildCommand: npm ci && npm run build
+    startCommand: npx next start -p $PORT
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      # next.config.js rewrites /api/* to this URL, so the browser never makes a cross-origin call.
+      - key: BACKEND_URL
+        fromService:
+          type: web
+          name: ib-allocation-api
+          property: hostport

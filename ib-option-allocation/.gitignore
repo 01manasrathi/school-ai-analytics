@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# Local database (re-created by: python -m app.seed)
+*.db
+*.sqlite3
+
+# Local secrets — never commit
+.streamlit/secrets.toml
+.env
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+npm-debug.log*
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Archify sidecars
+docs/diagrams/*.visual-check.*
+docs/diagrams/.*.snapshot.json

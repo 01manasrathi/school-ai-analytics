@@ -1,0 +1,40 @@
+# ---------------------------------------------------------------------------
+# Dependencies for the STREAMLIT deployment  (entry point: streamlit_app.py)
+# Streamlit Community Cloud installs this file automatically from the repo root.
+#
+# Ranges, not exact pins, so pip can build on whichever Python version Community
+# Cloud gives you. Verified to resolve with no conflicts (pip --dry-run) and with
+# the backend test suite green (37 passed).
+# ---------------------------------------------------------------------------
+
+# --- UI ---------------------------------------------------------------------
+streamlit>=1.65,<2            # the web UI; >=1.65 for the st.dataframe(width="stretch") API
+pandas>=2.2                   # tables rendered by st.dataframe / st.data_editor
+
+# --- Backend shared with the FastAPI app (backend/app) ----------------------
+SQLAlchemy>=2.0.30,<2.1       # ORM and all database access; capped at the tested 2.0.x line
+alembic>=1.13,<2              # schema migrations (backend/alembic)
+pydantic>=2.9,<3              # request models the Streamlit pages reuse
+
+# --- FastAPI layer reused directly by streamlit_app.py ----------------------
+# streamlit_app.py imports backend/app/routers/* so the Streamlit pages run the
+# exact same business logic as the REST API. FastAPI is therefore required even
+# though no API server is started on Streamlit Cloud.
+#
+# VERSION NOTE: modern Streamlit also runs on Starlette (>=0.46,<2). Older
+# FastAPI (0.115.x) caps Starlette at <0.42, which makes the two impossible to
+# install together ("ResolutionImpossible"). FastAPI >=0.142 only requires
+# starlette>=0.46, so the ranges overlap and pip resolves cleanly. Do not pin
+# FastAPI back below 0.142 unless you also drop Streamlit.
+fastapi>=0.142,<1
+starlette>=0.46,<2
+
+# --- Only needed to run the REST API locally (uvicorn app.main:app) ---------
+# Harmless on Streamlit Cloud; delete these two lines for a slimmer build.
+uvicorn>=0.30,<1
+python-multipart>=0.0.9
+
+# --- PostgreSQL instead of SQLite (optional, recommended on the cloud) ------
+# Streamlit Cloud storage is ephemeral: a SQLite file is wiped on every restart.
+# Uncomment and set DATABASE_URL in the app's Secrets to keep data.
+# psycopg2-binary>=2.9.9

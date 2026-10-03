@@ -1,0 +1,19 @@
+# Dependencies for the REST API + test suite (uvicorn app.main:app, pytest).
+# The Streamlit deployment uses the root requirements.txt instead.
+# Keep the FastAPI/Starlette ranges in sync with the root file: FastAPI >=0.142
+# is required so the stack can coexist with Streamlit (which needs starlette>=0.46).
+
+fastapi>=0.142,<1
+starlette>=0.46,<2
+uvicorn>=0.30,<1
+SQLAlchemy>=2.0.30,<2.1
+alembic>=1.13,<2
+pydantic>=2.9,<3
+python-multipart>=0.0.9
+
+# Tests
+pytest>=8.3,<9
+httpx>=0.27,<1
+
+# Uncomment to use PostgreSQL instead of SQLite:
+# psycopg2-binary>=2.9.9

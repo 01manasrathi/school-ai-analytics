@@ -1,0 +1,260 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Change Request — Feasibility Check then Admin Override",
+    "viewBox": [
+      1040,
+      570
+    ],
+    "column_fit": "spread",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "live-check",
+        "label": "Live what-if check",
+        "focus": [
+          "user",
+          "ui",
+          "router",
+          "engine"
+        ],
+        "note": "The check is read-only: no enrollment or choice row is touched."
+      },
+      {
+        "id": "authorisation",
+        "label": "Authorisation",
+        "focus": [
+          "router",
+          "auth"
+        ],
+        "note": "Every write endpoint runs through require_admin before any work starts."
+      },
+      {
+        "id": "transactional-apply",
+        "label": "Transactional apply",
+        "focus": [
+          "router",
+          "engine",
+          "db"
+        ],
+        "note": "Feasibility is re-evaluated immediately before the swap is written."
+      }
+    ]
+  },
+  "participants": [
+    {
+      "id": "user",
+      "type": "external",
+      "label": "Timetabler",
+      "sublabel": "Change Requests page"
+    },
+    {
+      "id": "ui",
+      "type": "frontend",
+      "label": "Next.js UI",
+      "sublabel": "lib/api.ts"
+    },
+    {
+      "id": "router",
+      "type": "backend",
+      "label": "Router",
+      "sublabel": "change_requests.py"
+    },
+    {
+      "id": "auth",
+      "type": "security",
+      "label": "Auth",
+      "sublabel": "require_admin"
+    },
+    {
+      "id": "engine",
+      "type": "backend",
+      "label": "Engine",
+      "sublabel": "check_feasibility"
+    },
+    {
+      "id": "db",
+      "type": "database",
+      "label": "SQLite",
+      "sublabel": "via services.py"
+    }
+  ],
+  "segments": [
+    {
+      "from": 150,
+      "to": 340,
+      "label": "Live what-if check (read-only)"
+    },
+    {
+      "from": 348,
+      "to": 424,
+      "label": "Override with a required reason"
+    },
+    {
+      "from": 432,
+      "to": 484,
+      "label": "Apply in one transaction"
+    }
+  ],
+  "messages": [
+    {
+      "id": "pick-swap",
+      "from": "user",
+      "to": "ui",
+      "y": 160,
+      "label": "pick student and target subject",
+      "variant": "default"
+    },
+    {
+      "id": "check-call",
+      "from": "ui",
+      "to": "router",
+      "y": 188,
+      "label": "POST /api/feasibility/check",
+      "variant": "emphasis"
+    },
+    {
+      "id": "verify-token",
+      "from": "router",
+      "to": "auth",
+      "y": 216,
+      "label": "verify Bearer token",
+      "variant": "security"
+    },
+    {
+      "id": "load-state",
+      "from": "router",
+      "to": "db",
+      "y": 244,
+      "label": "load choices, offerings, rules",
+      "variant": "default"
+    },
+    {
+      "id": "run-engine",
+      "from": "router",
+      "to": "engine",
+      "y": 272,
+      "label": "check_feasibility(swap, RuleSet)",
+      "variant": "emphasis"
+    },
+    {
+      "id": "verdict",
+      "from": "engine",
+      "to": "router",
+      "y": 300,
+      "label": "NEEDS_OVERRIDE + reasons",
+      "variant": "return"
+    },
+    {
+      "id": "verdict-json",
+      "from": "router",
+      "to": "ui",
+      "y": 328,
+      "label": "verdict JSON, nothing written",
+      "variant": "return"
+    },
+    {
+      "id": "type-reason",
+      "from": "user",
+      "to": "ui",
+      "y": 356,
+      "label": "type override reason",
+      "variant": "default"
+    },
+    {
+      "id": "override-call",
+      "from": "ui",
+      "to": "router",
+      "y": 384,
+      "label": "POST /change-request/4/override",
+      "variant": "emphasis"
+    },
+    {
+      "id": "recheck",
+      "from": "router",
+      "to": "engine",
+      "y": 412,
+      "label": "re-check before applying",
+      "variant": "default"
+    },
+    {
+      "id": "apply-swap",
+      "from": "router",
+      "to": "db",
+      "y": 440,
+      "label": "source -1, target +1, audit row",
+      "variant": "emphasis"
+    },
+    {
+      "id": "final-status",
+      "from": "router",
+      "to": "ui",
+      "y": 468,
+      "label": "status OVERRIDDEN",
+      "variant": "return"
+    }
+  ],
+  "activations": [
+    {
+      "participant": "ui",
+      "from": 176,
+      "to": 478,
+      "type": "frontend"
+    },
+    {
+      "participant": "router",
+      "from": 182,
+      "to": 472,
+      "type": "backend"
+    },
+    {
+      "participant": "auth",
+      "from": 207,
+      "to": 226,
+      "type": "security"
+    },
+    {
+      "participant": "db",
+      "from": 239,
+      "to": 258,
+      "type": "database"
+    },
+    {
+      "participant": "engine",
+      "from": 267,
+      "to": 306,
+      "type": "backend"
+    },
+    {
+      "participant": "engine",
+      "from": 407,
+      "to": 424,
+      "type": "backend"
+    },
+    {
+      "participant": "db",
+      "from": 435,
+      "to": 452,
+      "type": "database"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "The check is free",
+      "items": [
+        "The UI re-checks on every dropdown change",
+        "Nothing is written, so the timetabler can explore freely"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "The write is guarded",
+      "items": [
+        "Approve and override re-run feasibility: capacity may have changed",
+        "Reason required; history, both seat counts and audit share one commit"
+      ]
+    }
+  ]
+}

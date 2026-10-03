@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IB Option Allocation Tool — Diagrams</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { margin:0; font:15px/1.5 system-ui,Segoe UI,Roboto,sans-serif; background:#0f172a; color:#e2e8f0; }
+  .wrap { max-width:1000px; margin:0 auto; padding:48px 24px 64px; }
+  h1 { font-size:26px; margin:0 0 6px; }
+  p.sub { color:#93a3b8; margin:0 0 32px; }
+  .grid { display:grid; gap:16px; grid-template-columns:repeat(auto-fit,minmax(340px,1fr)); }
+  a.card { display:block; padding:18px 20px; border-radius:14px; background:#1e293b; border:1px solid #334155;
+           text-decoration:none; color:inherit; transition:.15s; }
+  a.card:hover { border-color:#6366f1; transform:translateY(-2px); }
+  .kind { font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#818cf8; }
+  .t { font-size:17px; font-weight:650; margin:6px 0 4px; }
+  .d { font-size:13px; color:#94a3b8; }
+  footer { margin-top:36px; font-size:13px; color:#94a3b8; }
+  footer a { color:#a5b4fc; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>IB Option Allocation &amp; Change Feasibility Tool</h1>
+  <p class="sub">Four interactive diagrams of the real implementation. Each page supports dark/light themes, pan &amp; zoom, search, relationship tracing, guided views and PNG/SVG export.</p>
+  <div class="grid">
+    <a class="card" href="system.architecture.html">
+      <div class="kind">Architecture</div>
+      <div class="t">System architecture</div>
+      <div class="d">Browser → Next.js proxy → FastAPI routers → services → pure engines → SQLite, with the rules table and the ADMIN gate.</div>
+    </a>
+    <a class="card" href="allocation.workflow.html">
+      <div class="kind">Workflow</div>
+      <div class="t">New student allocation</div>
+      <div class="d">Run (dry run) → per-block pruned search → rule check → proposal → review &amp; edit → commit, plus the waitlist branch.</div>
+    </a>
+    <a class="card" href="change-request.sequence.html">
+      <div class="kind">Sequence</div>
+      <div class="t">Feasibility check then override</div>
+      <div class="d">The read-only what-if call, the ADMIN token gate, the re-check before writing and the single-transaction apply.</div>
+    </a>
+    <a class="card" href="change-request.lifecycle.html">
+      <div class="kind">Lifecycle</div>
+      <div class="t">Change request statuses</div>
+      <div class="d">PENDING → decision → apply → audit → APPROVED, with WAITLISTED, OVERRIDDEN and REJECTED outcomes.</div>
+    </a>
+  </div>
+  <footer>
+    App: <a href="http://localhost:3000">http://localhost:3000</a> (admin / admin123) ·
+    API docs: <a href="http://127.0.0.1:8000/docs">http://127.0.0.1:8000/docs</a> ·
+    Written docs: <code>README.md</code>, <code>GUIDE.md</code>
+  </footer>
+</div>
+</body>
+</html>

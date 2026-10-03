@@ -1,0 +1,224 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "Change Request Lifecycle — Status Transitions",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "happy-path",
+        "label": "Straight approval",
+        "focus": [
+          "pending",
+          "decision",
+          "applying",
+          "audited",
+          "approved"
+        ],
+        "note": "A feasible request moves seat counts and writes its audit row in one transaction."
+      },
+      {
+        "id": "waiting-for-seat",
+        "label": "Waiting for a seat",
+        "focus": [
+          "decision",
+          "waitlisted"
+        ],
+        "note": "A full target class parks the request without changing the student's timetable."
+      },
+      {
+        "id": "exceptions",
+        "label": "Override and refusal",
+        "focus": [
+          "decision",
+          "rejected",
+          "overridden"
+        ],
+        "note": "Overrides need a reason; hard conflicts cannot be forced at all."
+      }
+    ]
+  },
+  "lanes": [
+    {
+      "id": "main",
+      "label": "Status rail"
+    },
+    {
+      "id": "waiting",
+      "label": "Waiting for a seat"
+    },
+    {
+      "id": "exceptions",
+      "label": "Exceptional outcomes"
+    }
+  ],
+  "states": [
+    {
+      "id": "pending",
+      "type": "start",
+      "label": "PENDING",
+      "sublabel": "verdict stored",
+      "lane": "main",
+      "col": 0,
+      "step": "01",
+      "tag": "created",
+      "height": 72
+    },
+    {
+      "id": "decision",
+      "type": "decision",
+      "label": "Decision",
+      "sublabel": "engine runs again",
+      "lane": "main",
+      "col": 1,
+      "step": "02",
+      "tag": "live verdict",
+      "height": 72
+    },
+    {
+      "id": "applying",
+      "type": "active",
+      "label": "Apply swap",
+      "sublabel": "source -1, target +1",
+      "lane": "main",
+      "col": 2,
+      "step": "03",
+      "tag": "seats",
+      "height": 72
+    },
+    {
+      "id": "audited",
+      "type": "active",
+      "label": "Audit and commit",
+      "sublabel": "history kept",
+      "lane": "main",
+      "col": 3,
+      "step": "04",
+      "tag": "one transaction",
+      "height": 72
+    },
+    {
+      "id": "approved",
+      "type": "success",
+      "label": "APPROVED",
+      "sublabel": "student moved",
+      "lane": "main",
+      "col": 4,
+      "step": "05",
+      "tag": "terminal",
+      "height": 72
+    },
+    {
+      "id": "waitlisted",
+      "type": "waiting",
+      "label": "WAITLISTED",
+      "sublabel": "keeps current class",
+      "lane": "waiting",
+      "col": 0,
+      "tag": "reversible"
+    },
+    {
+      "id": "rejected",
+      "type": "failure",
+      "label": "REJECTED",
+      "sublabel": "waitlist entry cleared",
+      "lane": "exceptions",
+      "col": 1,
+      "tag": "terminal"
+    },
+    {
+      "id": "overridden",
+      "type": "success",
+      "label": "OVERRIDDEN",
+      "sublabel": "reason recorded",
+      "lane": "exceptions",
+      "col": 2,
+      "tag": "terminal"
+    }
+  ],
+  "transitions": [
+    {
+      "id": "act-on-request",
+      "from": "pending",
+      "to": "decision",
+      "label": "approve or override",
+      "variant": "default",
+      "labelDy": -38
+    },
+    {
+      "id": "feasible-apply",
+      "from": "decision",
+      "to": "applying",
+      "label": "FEASIBLE",
+      "variant": "emphasis",
+      "labelDy": -38
+    },
+    {
+      "id": "apply-then-audit",
+      "from": "applying",
+      "to": "audited",
+      "variant": "emphasis"
+    },
+    {
+      "id": "audit-then-done",
+      "from": "audited",
+      "to": "approved",
+      "variant": "emphasis"
+    },
+    {
+      "id": "target-full",
+      "from": "decision",
+      "to": "waitlisted",
+      "label": "target full",
+      "variant": "default",
+      "fromSide": "bottom",
+      "toSide": "left"
+    },
+    {
+      "id": "seat-frees",
+      "from": "waitlisted",
+      "to": "decision",
+      "label": "seat frees up",
+      "variant": "emphasis",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "refuse",
+      "from": "pending",
+      "to": "rejected",
+      "label": "rejected outright",
+      "variant": "security",
+      "fromSide": "bottom",
+      "toSide": "bottom",
+      "route": "bottom-channel"
+    },
+    {
+      "id": "forced-write",
+      "from": "audited",
+      "to": "overridden",
+      "label": "forced with reason",
+      "variant": "security",
+      "fromSide": "bottom",
+      "toSide": "top"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Verdict is never cached",
+      "items": [
+        "Approve and override both re-run the feasibility engine first",
+        "A waitlisted student keeps the current class until a seat frees up"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Forcing has limits",
+      "items": [
+        "Override stores a reason of 5+ characters plus an audit row",
+        "Block conflict, duplicate subject and period clash cannot be forced"
+      ]
+    }
+  ]
+}
